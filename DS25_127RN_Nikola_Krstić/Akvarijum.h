@@ -1,8 +1,8 @@
 #pragma once
 #include<vector>
 #include<memory>
-
-
+#include "Ribica.h"
+#include "Hranilica.h"
 
 class Akvarijum {
 private:
@@ -16,7 +16,8 @@ private:
 public:
 	// unique jer su nezavisni da vise delvova koda koristi ribicu isli bi sa shared
 	// mozda shared nije los zbog onog brojanja koje sprovodi nevidljivi entitet
-	std::vector<std::unique_ptr<Ribica>> ribice = std::make_unique<Ribica>();
+	std::vector<std::unique_ptr<Ribica>> ribice;
+	std::unique_ptr<Hranilica> hranilica;
 	
 	static Akvarijum& instance() {
 		static Akvarijum instanca;
@@ -24,13 +25,19 @@ public:
 			instanca.initialise();
 		return instanca;
 	}
-
+	void dodaj(unique_ptr<Ribica> ribica) {
+		ribice.push_back(move(ribica));
+	}
 
 	void crtaj(CDC* pDC) const {
-		for (Ribica* r : ribice) {
-			r->crtaj();
+		CRect rc;
+		pDC->GetWindow()->GetClientRect(&rc);
+		pDC->FillRect(&rc, &Olovke::plava_cetkica);
+
+		for (const auto& r : ribice) {
+			r->crtaj(pDC);
 		}
-		hranilica->crtaj();
+		hranilica->crtaj(pDC);
 	}
 	void initialise() {
 

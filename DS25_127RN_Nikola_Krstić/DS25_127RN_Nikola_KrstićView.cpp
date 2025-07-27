@@ -17,7 +17,8 @@
 #define new DEBUG_NEW
 #endif
 
-
+#include "Akvarijum.h"
+#include "RibicaFactory.h"
 // CDS25127RNNikolaKrstićView
 
 IMPLEMENT_DYNCREATE(CDS25127RNNikolaKrstićView, CView)
@@ -25,11 +26,13 @@ IMPLEMENT_DYNCREATE(CDS25127RNNikolaKrstićView, CView)
 BEGIN_MESSAGE_MAP(CDS25127RNNikolaKrstićView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_WM_LBUTTONUP()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CDS25127RNNikolaKrstićView construction/destruction
 
-CDS25127RNNikolaKrstićView::CDS25127RNNikolaKrstićView() noexcept
+CDS25127RNNikolaKrstićView::CDS25127RNNikolaKrstićView() noexcept :timer(NULL)
 {
 	// TODO: add construction code here
 
@@ -49,19 +52,26 @@ BOOL CDS25127RNNikolaKrstićView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CDS25127RNNikolaKrstićView drawing
 
-void CDS25127RNNikolaKrstićView::OnDraw(CDC* /*pDC*/)
+void CDS25127RNNikolaKrstićView::OnDraw(CDC* pDC)
 {
 	CDS25127RNNikolaKrstićDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
+	if (timer == NULL)
+		timer = SetTimer(1, 30, NULL);
 
+	Akvarijum::instance().crtaj(pDC);
+	
 	// TODO: add draw code for native data here
 }
 
-void CDS25127RNNikolaKrstićView::OnRButtonUp(UINT /* nFlags */, CPoint point)
+void CDS25127RNNikolaKrstićView::OnRButtonUp(UINT nFlags , CPoint point)
 {
-	ClientToScreen(&point);
+	//ClientToScreen(&point);
+	Akvarijum::instance().hranilica = std::make_unique<Hranilica>();
+
+
 	OnContextMenu(this, point);
 }
 
@@ -95,3 +105,34 @@ CDS25127RNNikolaKrstićDoc* CDS25127RNNikolaKrstićView::GetDocument() const // 
 
 
 // CDS25127RNNikolaKrstićView message handlers
+
+void CDS25127RNNikolaKrstićView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+	auto NovaRibica = RibicaFactory::napravi_ribicu(point.x, point.y);
+	
+
+
+	Akvarijum::instance().dodaj(move(NovaRibica));
+	
+	CView::OnLButtonUp(nFlags, point);
+}
+
+void CDS25127RNNikolaKrstićView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDS25127RNNikolaKrstićDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	
+	for (auto &ribica : Akvarijum::instance().ribice) {
+		ribica.get()->pokreni();
+	}
+
+	
+
+	Invalidate();
+	CView::OnTimer(nIDEvent);
+}
