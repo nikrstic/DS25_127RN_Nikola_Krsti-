@@ -4,7 +4,8 @@
 #include "Ribica.h"
 #include "Hranilica.h"
 
-class Akvarijum {
+
+class Akvarijum :public Figura {
 private:
 	// moderniji pristup singletona
 	bool initialized;
@@ -17,7 +18,7 @@ public:
 	// unique jer su nezavisni da vise delvova koda koristi ribicu isli bi sa shared
 	// mozda shared nije los zbog onog brojanja koje sprovodi nevidljivi entitet
 	std::vector<std::unique_ptr<Ribica>> ribice;
-	std::unique_ptr<Hranilica> hranilica;
+	Hranilica* hranilica = nullptr;
 	
 	static Akvarijum& instance() {
 		static Akvarijum instanca;
@@ -28,6 +29,10 @@ public:
 	void dodaj(unique_ptr<Ribica> ribica) {
 		ribice.push_back(move(ribica));
 	}
+	void postaviHranilicu(Hranilica *hranilica) {
+		this->hranilica = hranilica;
+
+	}
 
 	void crtaj(CDC* pDC) const {
 		CRect rc;
@@ -37,12 +42,13 @@ public:
 		for (const auto& r : ribice) {
 			r->crtaj(pDC);
 		}
-		hranilica->crtaj(pDC);
+		if (hranilica)
+			hranilica->crtaj(pDC);
+	}
+	int getX()const {
+		return this->x;
 	}
 	void initialise() {
-
-
-
 
 
 		this->initialized = true;

@@ -80,6 +80,12 @@
     <ClCompile Include="Olovke.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hranilica.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Akvarijum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DS25127RNNikolaKrstic.rc">

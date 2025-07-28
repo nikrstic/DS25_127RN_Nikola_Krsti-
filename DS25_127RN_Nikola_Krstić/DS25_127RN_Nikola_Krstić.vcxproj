@@ -200,9 +200,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Akvarijum.cpp" />
     <ClCompile Include="DS25_127RN_Nikola_Krstić.cpp" />
     <ClCompile Include="DS25_127RN_Nikola_KrstićDoc.cpp" />
     <ClCompile Include="DS25_127RN_Nikola_KrstićView.cpp" />
+    <ClCompile Include="Hranilica.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="Olovke.cpp" />
     <ClCompile Include="pch.cpp">

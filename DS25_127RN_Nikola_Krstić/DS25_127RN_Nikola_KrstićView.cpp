@@ -19,6 +19,7 @@
 
 #include "Akvarijum.h"
 #include "RibicaFactory.h"
+#include "Hranilica.h"
 // CDS25127RNNikolaKrstićView
 
 IMPLEMENT_DYNCREATE(CDS25127RNNikolaKrstićView, CView)
@@ -69,8 +70,12 @@ void CDS25127RNNikolaKrstićView::OnDraw(CDC* pDC)
 void CDS25127RNNikolaKrstićView::OnRButtonUp(UINT nFlags , CPoint point)
 {
 	//ClientToScreen(&point);
-	Akvarijum::instance().hranilica = std::make_unique<Hranilica>();
-
+	if (Hranilica::getInstance()==nullptr) {
+		Akvarijum::instance().postaviHranilicu(Hranilica::getInstance(point.x, point.y));
+	}
+	else {
+		Hranilica::getInstance()->promeniPoz(point.x, point.y);
+	}
 
 	OnContextMenu(this, point);
 }
@@ -128,10 +133,13 @@ void CDS25127RNNikolaKrstićView::OnTimer(UINT_PTR nIDEvent)
 		return;
 	
 	for (auto &ribica : Akvarijum::instance().ribice) {
-		ribica.get()->pokreni();
+		ribica.get()->pokreni(this);
 	}
-
 	
+	if (Hranilica::getInstance()) {
+		// mi smo sad u ..View i this je pokazivac na njega 
+		Hranilica::getInstance()->pokreni(this);
+	}
 
 	Invalidate();
 	CView::OnTimer(nIDEvent);

@@ -1,10 +1,12 @@
 #pragma once
+
 #include "pch.h"
-
-
+#include "Strategija.h"
+using namespace std;
 
 class Figura {
 protected:
+
 	std::unique_ptr<Strategija> strat;
 	CPen* boja;
 	std::atomic<int> x, y;
