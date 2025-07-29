@@ -11,13 +11,13 @@
 
 class Ribica: public Figura {
 public:
-	Ribica(int x, int y, int velicina,float brzina ,CPen* boja,unique_ptr<Strategija> strat) :Figura(x, y, velicina, brzina,boja, move(strat)) {
+	Ribica(int x, int y, int velicina,float brzina ,CBrush* boja,unique_ptr<Strategija> strat) :Figura(x, y, velicina, brzina,boja, move(strat)) {
 		
 	}
 	bool pokrenuta = false;
 	void crtaj(CDC* pDC) const {
 		// TODO sredi ovo sa olovke
-		CPen* stara_olovka = pDC->SelectObject(this->boja);
+		CBrush* stara_olovka = pDC->SelectObject(this->boja);
 		int cx = x.load();
 		int cy = y.load();
 		

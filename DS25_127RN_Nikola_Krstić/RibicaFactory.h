@@ -25,19 +25,19 @@ namespace RibicaFactory {
 		int brojBoje = generisi_broj(1, 3);
 		//crvena, tamno plava, zelena
 		float brzina = velicina / 2.0;
-		CPen* boja;
+		CBrush* boja;
 		switch (brojBoje) {
 		case 1:
-			boja = &Olovke::crvena_olovka;
+			boja = &Olovke::crvena_cetkica;
 			break;
 		case 2:
-			boja = &Olovke::tamnoPlava_olovka;
+			boja = &Olovke::tamnoPlava_cetkica;
 			break;
 		case 3:
-			boja = &Olovke::zelena_olovka;
+			boja = &Olovke::zelena_cetkica;
 			break;
 		default:
-			boja = &Olovke::zelena_olovka;
+			boja = &Olovke::zelena_cetkica;
 		}
 		return std::make_unique<Ribica>(x, y, velicina, brzina, boja, std::make_unique<StrategijaHaoticno>());
 	}

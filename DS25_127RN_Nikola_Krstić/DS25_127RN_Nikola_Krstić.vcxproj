@@ -192,6 +192,7 @@
     <ClInclude Include="Hranilica.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Olovke.h" />
+    <ClInclude Include="PaketHrane.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Ribica.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="Hranilica.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="Olovke.cpp" />
+    <ClCompile Include="PaketHrane.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

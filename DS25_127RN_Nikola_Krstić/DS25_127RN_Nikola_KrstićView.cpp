@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CDS25127RNNikolaKrstićView, CView)
 	ON_WM_RBUTTONUP()
 	ON_WM_LBUTTONUP()
 	ON_WM_TIMER()
+	ON_WM_MBUTTONUP()
 END_MESSAGE_MAP()
 
 // CDS25127RNNikolaKrstićView construction/destruction
@@ -78,6 +79,24 @@ void CDS25127RNNikolaKrstićView::OnRButtonUp(UINT nFlags , CPoint point)
 	}
 
 	OnContextMenu(this, point);
+}
+void CDS25127RNNikolaKrstićView::OnMButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+	/*int xHranilice = Hranilica::getInstance()->getX();
+	int yHranilice = Hranilica::getInstance()->getY();
+	int velicinaHranilice = Hranilica::getVelicina();*/
+	
+	//if(point.x >= (xHranilice-velicinaHranilice/2) && point.x <=(xHranilice+=velicinaHranilice/2)  )
+		//if (point.y >= (yHranilice - velicinaHranilice / 2) && point.y <= (yHranilice += velicinaHranilice / 2))
+		//{
+	
+	Hranilica::unistiHranilicu();
+	Akvarijum::instance().hranilica = nullptr;
+	
+	//delete Hranilica::getInstance();
+		//}
+	CView::OnMButtonUp(nFlags, point);
 }
 
 void CDS25127RNNikolaKrstićView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
@@ -144,3 +163,4 @@ void CDS25127RNNikolaKrstićView::OnTimer(UINT_PTR nIDEvent)
 	Invalidate();
 	CView::OnTimer(nIDEvent);
 }
+

@@ -7,6 +7,12 @@ public:
 	static CPen zelena_olovka;
 
 
+
+	static CBrush crvena_cetkica;
+	static CBrush tamnoPlava_cetkica;
+	static CBrush zelena_cetkica;
+
+
 	static CBrush plava_cetkica;
 	static CBrush crna_cetkica;
 

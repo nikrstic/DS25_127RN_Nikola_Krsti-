@@ -60,6 +60,9 @@
     <ClInclude Include="RibicaFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PaketHrane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DS25_127RN_Nikola_Krstić.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Akvarijum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PaketHrane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

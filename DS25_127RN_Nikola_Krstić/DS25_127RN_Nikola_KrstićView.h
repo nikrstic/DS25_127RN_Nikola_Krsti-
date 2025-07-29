@@ -43,6 +43,7 @@ protected:
 public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnMButtonUp(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in DS25_127RN_Nikola_KrstićView.cpp

@@ -42,8 +42,12 @@ public:
 		for (const auto& r : ribice) {
 			r->crtaj(pDC);
 		}
-		if (hranilica)
-			hranilica->crtaj(pDC);
+		if (hranilica->getInstance()) {
+			hranilica->getInstance()->crtaj(pDC);
+			for (const auto& paket : hranilica->getInstance()->paketi) {
+				paket->crtaj(pDC);
+			}
+		}
 	}
 	int getX()const {
 		return this->x;
