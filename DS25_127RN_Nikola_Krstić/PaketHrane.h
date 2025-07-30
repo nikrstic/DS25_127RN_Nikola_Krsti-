@@ -3,6 +3,7 @@
 #include "Figura.h"
 #include "Olovke.h"
 #include "Strategija.h"
+
 #include<memory>
 
 class Hranilica;
@@ -14,8 +15,12 @@ public:
 	
 	PaketHrane(int x, int y):Figura(x, y,velicina,0, &Olovke::crna_cetkica, std::make_unique<StrategijaMiruj>()){}
 	
-	
-
+	int getX() {
+		return this->x;
+	}
+	int getY() {
+		return this->y;
+	}
 
 	void crtaj(CDC* pDC)const;
 

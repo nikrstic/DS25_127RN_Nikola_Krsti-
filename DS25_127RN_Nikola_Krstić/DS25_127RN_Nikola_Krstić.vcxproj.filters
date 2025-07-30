@@ -92,6 +92,9 @@
     <ClCompile Include="PaketHrane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ribica.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DS25127RNNikolaKrstic.rc">

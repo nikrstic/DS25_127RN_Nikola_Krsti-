@@ -1,11 +1,16 @@
 #pragma once
-#include "Figura.h"
+
+
+
 #include "Olovke.h"
 #include "Strategija.h"
-#include<memory>
-#include "pch.h"
-#include<thread>
+#include "Figura.h"
 #include "PaketHrane.h"
+
+#include<memory>
+#include<vector>
+#include<thread>
+
 
 class Hranilica : public Figura {
 	
@@ -13,7 +18,7 @@ private:
 	static int  const velicina = 30;
 	static int const brzina = 10;
 	bool zaustavi = false;
-	
+
 	static Hranilica* instanca;
 	bool pokrenuta = false;
 	std::thread nit;
@@ -31,13 +36,21 @@ private:
 			this->strat = std::make_unique<StrategijaDesno>();
 	}
 public:
-	vector<unique_ptr<PaketHrane>> paketi;
+	// dodao sam da bude staticka da se ne brisu paketi hrane kad se budu brisale hranilice
+	static std::vector<std::unique_ptr<PaketHrane>> paketi;
+	
+	static atomic<bool> paketHraneAktivan;
+	static atomic<int> xPaket;
+	static atomic<int> yPaket;
+	
 	static int getVelicina() {
 		return velicina;
 	}
 	static Hranilica* getInstance() {
 		return instanca;
 	}
+	
+
 	static Hranilica* getInstance(int x, int y) {
 
 		if (!instanca)
@@ -81,9 +94,25 @@ public:
 	}
 
 	void dodajPaketHrane(int x, int y) {
-		paketi.push_back(std::make_unique<PaketHrane>(x, y));
+		Hranilica::paketi.push_back(std::make_unique<PaketHrane>(x, y));
+		Hranilica::paketHraneAktivan = true;
+		//sta ako ribice ne budu dovoljno blizu da paket hrane bude pojeden pa se pojavi novi?
+		Hranilica::xPaket = x;
+		Hranilica::yPaket = y;
 
 	}
+
+	static void pojediPaketHrane(int x, int y) {
+		for (int i = 0; i < Hranilica::paketi.size(); i++) {
+			if (Hranilica::paketi.at(i)->getX() == x && Hranilica::paketi.at(i)->getY() == y) {
+				//paketi.at(i).reset();
+				Hranilica::paketi.erase(Hranilica::paketi.begin() + i);
+				break;
+			}
+		}
+
+	}
+
 	void pokreni(CView* view) {
 		if (pokrenuta) return;
 		pokrenuta = true;
