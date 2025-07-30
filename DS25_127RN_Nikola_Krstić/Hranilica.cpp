@@ -9,7 +9,7 @@ Hranilica* Hranilica::instanca = nullptr;
 
 
 atomic<bool> Hranilica::paketHraneAktivan = false;
-atomic<int> Hranilica::xPaket;
+atomic<int> Hranilica::xPaket = -1;
 atomic<int> Hranilica::yPaket;
 
 std::vector<std::unique_ptr<PaketHrane>> Hranilica::paketi;

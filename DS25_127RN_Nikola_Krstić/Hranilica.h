@@ -95,8 +95,15 @@ public:
 
 	void dodajPaketHrane(int x, int y) {
 		Hranilica::paketi.push_back(std::make_unique<PaketHrane>(x, y));
-		Hranilica::paketHraneAktivan = true;
+		
 		//sta ako ribice ne budu dovoljno blizu da paket hrane bude pojeden pa se pojavi novi?
+		// resio sa cekanjem dok ne postane -1 
+		
+		//xPaket.wait(-1); // ne moze blokiramo glavnu nit
+		// ovde sam stavio da jede redom pakete kako se stvaraju da ne ostane nei nepojeden // ne moze jer onda ih jede redom, ali ceka da se pojavi nova da pojede sledecu u nizu
+		/*Hranilica::xPaket = Hranilica::paketi.at(0).get()->getX();
+		Hranilica::yPaket = Hranilica::paketi.at(0).get()->getY();*/
+		Hranilica::paketHraneAktivan = true;
 		Hranilica::xPaket = x;
 		Hranilica::yPaket = y;
 
@@ -105,7 +112,7 @@ public:
 	static void pojediPaketHrane(int x, int y) {
 		for (int i = 0; i < Hranilica::paketi.size(); i++) {
 			if (Hranilica::paketi.at(i)->getX() == x && Hranilica::paketi.at(i)->getY() == y) {
-				//paketi.at(i).reset();
+				Hranilica::paketHraneAktivan = false;
 				Hranilica::paketi.erase(Hranilica::paketi.begin() + i);
 				break;
 			}
