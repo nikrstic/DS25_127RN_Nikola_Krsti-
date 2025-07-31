@@ -53,8 +53,12 @@ public:
 					this->brzina = this->brzina * 0.5;
 				}
 				std::this_thread::sleep_for(std::chrono::milliseconds(30));
+				// da se ne desi da kad kliknem x nestane ClientRect ribice ga traze i izbace exception
+				if (view == nullptr || !::IsWindow(view->GetSafeHwnd()))
+					break;
 				CRect rc;
 				view->GetClientRect(&rc);
+				
 				if (!Hranilica::paketi.empty()&& Hranilica::paketHraneAktivan) {
 					if (!ubrzana)
 						this->brzina = this->brzina * 2;
