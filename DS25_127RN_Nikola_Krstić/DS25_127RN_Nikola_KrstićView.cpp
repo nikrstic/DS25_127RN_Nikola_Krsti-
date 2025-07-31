@@ -20,6 +20,7 @@
 #include "Akvarijum.h"
 #include "RibicaFactory.h"
 #include "Hranilica.h"
+#include "StatistikaVisitor.h"
 // CDS25127RNNikolaKrstićView
 
 IMPLEMENT_DYNCREATE(CDS25127RNNikolaKrstićView, CView)
@@ -30,6 +31,7 @@ BEGIN_MESSAGE_MAP(CDS25127RNNikolaKrstićView, CView)
 	ON_WM_LBUTTONUP()
 	ON_WM_TIMER()
 	ON_WM_MBUTTONUP()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // CDS25127RNNikolaKrstićView construction/destruction
@@ -164,3 +166,24 @@ void CDS25127RNNikolaKrstićView::OnTimer(UINT_PTR nIDEvent)
 	CView::OnTimer(nIDEvent);
 }
 
+void CDS25127RNNikolaKrstićView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	if (nChar == VK_SPACE) {
+		CString s;
+		StatistikaVisitor visitor;
+		
+		Hranilica* hranilica = Hranilica::getInstance();
+		int broj_paketa = hranilica->accept(visitor);
+		
+		Akvarijum& akvarijum = Akvarijum::instance();
+
+		vector<float> ribicaStat = akvarijum.accept(visitor);
+		int a = ribicaStat.at(0);
+		s.Format(_T("Najveca ribica: %.2f \nNajmanja ribica: %.2f \nProsecna ribica: %.2f \nPaketi hrane:%d"),ribicaStat.at(0), ribicaStat.at(1), ribicaStat.at(2), broj_paketa);
+		AfxMessageBox(s, MB_OK);
+
+	}
+	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}

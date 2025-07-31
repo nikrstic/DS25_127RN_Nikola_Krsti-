@@ -63,6 +63,12 @@
     <ClInclude Include="PaketHrane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Visitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StatistikaVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DS25_127RN_Nikola_Krstić.cpp">

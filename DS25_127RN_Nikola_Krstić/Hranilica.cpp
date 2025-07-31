@@ -13,3 +13,5 @@ atomic<int> Hranilica::xPaket = -1;
 atomic<int> Hranilica::yPaket;
 
 std::vector<std::unique_ptr<PaketHrane>> Hranilica::paketi;
+
+std::mutex Hranilica::paketiMutex;

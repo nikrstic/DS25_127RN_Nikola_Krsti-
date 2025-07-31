@@ -198,8 +198,10 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Ribica.h" />
     <ClInclude Include="RibicaFactory.h" />
+    <ClInclude Include="StatistikaVisitor.h" />
     <ClInclude Include="Strategija.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Visitor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Akvarijum.cpp" />

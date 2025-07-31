@@ -6,6 +6,7 @@
 #include "Strategija.h"
 #include "Figura.h"
 #include "PaketHrane.h"
+#include "Visitor.h"
 
 #include<memory>
 #include<vector>
@@ -19,6 +20,7 @@ private:
 	static int const brzina = 10;
 	bool zaustavi = false;
 
+	
 	static Hranilica* instanca;
 	bool pokrenuta = false;
 	std::thread nit;
@@ -26,10 +28,11 @@ private:
 	Hranilica& operator=(const Hranilica&) = delete;
 
 	Hranilica(int x, int y) :Figura(x, y, velicina, brzina, &Olovke::crna_cetkica, std::make_unique<StrategijaMiruj>()) {
+		broj_paketa = 0;
 		static std::mt19937 gen(std::random_device{}());
 		std::uniform_int_distribution<> distrib(0, 1);
 		int br = distrib(gen);
-
+		
 		if (br == 0)
 			this->strat = std::make_unique<StrategijaLevo>();
 		else
@@ -39,6 +42,7 @@ public:
 	// dodao sam da bude staticka da se ne brisu paketi hrane kad se budu brisale hranilice
 	static std::vector<std::unique_ptr<PaketHrane>> paketi;
 	
+	int broj_paketa;
 	static atomic<bool> paketHraneAktivan;
 	static atomic<int> xPaket;
 	static atomic<int> yPaket;
@@ -92,8 +96,12 @@ public:
 		if (nit.joinable()) nit.join();
 		pokrenuta = false;
 	}
+	int accept(Visitor& v) {
+		return v.visit(*this);
+	}
 
 	void dodajPaketHrane(int x, int y) {
+		Hranilica::instanca->broj_paketa += 1;
 		Hranilica::paketi.push_back(std::make_unique<PaketHrane>(x, y));
 		
 		//sta ako ribice ne budu dovoljno blizu da paket hrane bude pojeden pa se pojavi novi?
@@ -101,25 +109,31 @@ public:
 		
 		//xPaket.wait(-1); // ne moze blokiramo glavnu nit
 		// ovde sam stavio da jede redom pakete kako se stvaraju da ne ostane nei nepojeden // ne moze jer onda ih jede redom, ali ceka da se pojavi nova da pojede sledecu u nizu
-		/*Hranilica::xPaket = Hranilica::paketi.at(0).get()->getX();
-		Hranilica::yPaket = Hranilica::paketi.at(0).get()->getY();*/
+		Hranilica::xPaket = Hranilica::paketi.at(0).get()->getX();
+		Hranilica::yPaket = Hranilica::paketi.at(0).get()->getY();
 		Hranilica::paketHraneAktivan = true;
-		Hranilica::xPaket = x;
-		Hranilica::yPaket = y;
+		/*Hranilica::xPaket = x;
+		Hranilica::yPaket = y;*/
 
 	}
-
+	static std::mutex paketiMutex;
 	static void pojediPaketHrane(int x, int y) {
-		for (int i = 0; i < Hranilica::paketi.size(); i++) {
-			if (Hranilica::paketi.at(i)->getX() == x && Hranilica::paketi.at(i)->getY() == y) {
+		//std::lock_guard<std::mutex> lockPaketi(paketiMutex); 
+
+		for (auto it = Hranilica::paketi.begin(); it != Hranilica::paketi.end(); ++it) {
+			auto& paket = *it;
+
+			if (paket->getX() == x && paket->getY() == y) {
+				//std::lock_guard<std::mutex> lockPaket(paket->hranaMutex); 
+
 				Hranilica::paketHraneAktivan = false;
-				Hranilica::paketi.erase(Hranilica::paketi.begin() + i);
+				Hranilica::paketi.erase(it); 
 				break;
 			}
+			xPaket = paketi.begin()->get()->getX();
+			yPaket = paketi.begin()->get()->getY();
 		}
-
 	}
-
 	void pokreni(CView* view) {
 		if (pokrenuta) return;
 		pokrenuta = true;
@@ -130,7 +144,7 @@ public:
 			while (!zaustavi) {
 				auto vremeSad = std::chrono::steady_clock::now();
 				auto proteklo = std::chrono::duration_cast<std::chrono::seconds>(vremeSad - pocetak);
-				if (proteklo.count() >= 3) {
+				if (proteklo.count() >= 1) {
 					pocetak = vremeSad;
 					this->dodajPaketHrane(x.load(), y.load());
 				}

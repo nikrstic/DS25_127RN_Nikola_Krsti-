@@ -3,7 +3,7 @@
 #include<memory>
 #include "Ribica.h"
 #include "Hranilica.h"
-
+#include "Visitor.h"
 
 class Akvarijum :public Figura {
 private:
@@ -33,7 +33,9 @@ public:
 		this->hranilica = hranilica;
 
 	}
-
+	vector<float> accept(Visitor& v) {
+		return v.visit(*this);
+	}
 	void crtaj(CDC* pDC) const {
 		CRect rc;
 		pDC->GetWindow()->GetClientRect(&rc);
