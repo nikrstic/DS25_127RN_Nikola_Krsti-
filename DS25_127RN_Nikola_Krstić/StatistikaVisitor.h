@@ -9,12 +9,12 @@ public:
 	int visit(Hranilica& hranilica) override {
 		if (Hranilica::getInstance())
 			return hranilica.broj_paketa;
-		return -1;
+		return 0;
 		
 	}
 	vector<float> visit(Akvarijum& akvarijum) override {
 		vector<float> resenje;
-		int broj_ribica = 0;
+		float broj_ribica = 0;
 		int min = INT_MAX;
 		int max = -1;
 		int sum = 0;

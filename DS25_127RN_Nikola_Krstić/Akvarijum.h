@@ -13,6 +13,9 @@ private:
 	Akvarijum(): initialized(false) {}
 	Akvarijum(const Akvarijum&) = delete;
 	Akvarijum& operator=(const Akvarijum&) = delete;
+	~Akvarijum() {
+		hranilica = nullptr;
+	}
 
 public:
 	// unique jer su nezavisni da vise delvova koda koristi ribicu isli bi sa shared
@@ -48,8 +51,11 @@ public:
 			hranilica->getInstance()->crtaj(pDC);
 			
 		}
+		
 		for (const auto& paket : hranilica->getInstance()->paketi) {
-			paket->crtaj(pDC);
+			if (paket.get()) {
+				paket.get()->crtaj(pDC);
+			}
 		}
 	}
 	int getX()const {

@@ -38,6 +38,12 @@ private:
 		else
 			this->strat = std::make_unique<StrategijaDesno>();
 	}
+	~Hranilica() {
+		zaustavi = true;
+		if (nit.joinable())
+			nit.join();
+	}
+
 public:
 	// dodao sam da bude staticka da se ne brisu paketi hrane kad se budu brisale hranilice
 	static std::vector<std::unique_ptr<PaketHrane>> paketi;
@@ -104,13 +110,14 @@ public:
 		Hranilica::instanca->broj_paketa += 1;
 		Hranilica::paketi.push_back(std::make_unique<PaketHrane>(x, y));
 		
-		//sta ako ribice ne budu dovoljno blizu da paket hrane bude pojeden pa se pojavi novi?
-		// resio sa cekanjem dok ne postane -1 
 		
-		//xPaket.wait(-1); // ne moze blokiramo glavnu nit
+
 		// ovde sam stavio da jede redom pakete kako se stvaraju da ne ostane nei nepojeden // ne moze jer onda ih jede redom, ali ceka da se pojavi nova da pojede sledecu u nizu
+
 		Hranilica::xPaket = Hranilica::paketi.at(0).get()->getX();
 		Hranilica::yPaket = Hranilica::paketi.at(0).get()->getY();
+		
+	
 		Hranilica::paketHraneAktivan = true;
 		/*Hranilica::xPaket = x;
 		Hranilica::yPaket = y;*/
@@ -119,7 +126,7 @@ public:
 	static std::mutex paketiMutex;
 	static void pojediPaketHrane(int x, int y) {
 		//std::lock_guard<std::mutex> lockPaketi(paketiMutex); 
-
+		
 		for (auto it = Hranilica::paketi.begin(); it != Hranilica::paketi.end(); ++it) {
 			auto& paket = *it;
 
@@ -127,11 +134,17 @@ public:
 				//std::lock_guard<std::mutex> lockPaket(paket->hranaMutex); 
 
 				Hranilica::paketHraneAktivan = false;
-				Hranilica::paketi.erase(it); 
+				Hranilica::paketi.erase(it);
+				if (!paketi.empty()) {
+					xPaket = paketi.front()->getX();
+					yPaket = paketi.front()->getY();
+					paketHraneAktivan = true;
+				}
+				else {
+					paketHraneAktivan = false;
+				}
 				break;
 			}
-			xPaket = paketi.begin()->get()->getX();
-			yPaket = paketi.begin()->get()->getY();
 		}
 	}
 	void pokreni(CView* view) {
@@ -144,7 +157,7 @@ public:
 			while (!zaustavi) {
 				auto vremeSad = std::chrono::steady_clock::now();
 				auto proteklo = std::chrono::duration_cast<std::chrono::seconds>(vremeSad - pocetak);
-				if (proteklo.count() >= 1) {
+				if (proteklo.count() >= 10) {
 					pocetak = vremeSad;
 					this->dodajPaketHrane(x.load(), y.load());
 				}
