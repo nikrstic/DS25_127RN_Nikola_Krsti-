@@ -9,7 +9,7 @@ using namespace std;
 class Strategija {
 public:
 	virtual void pomeri(atomic<int> &x, atomic<int> &y, atomic<int> korak) = 0;
-	
+    virtual bool jeHaoticna() const { return false; }
 };
 
 // usmereno levo desno haoticno
@@ -51,9 +51,11 @@ public:
         x += static_cast<int>(korak * cos(ug));
         y -= static_cast<int>(korak * sin(ug));
     }
+    bool jeHaoticna()  const override { return true; }
 };
 
 class StrategijaMiruj : public Strategija {
 public:
     void pomeri(std::atomic<int>& x, std::atomic<int>& y, atomic<int> korak) override {}
 };
+

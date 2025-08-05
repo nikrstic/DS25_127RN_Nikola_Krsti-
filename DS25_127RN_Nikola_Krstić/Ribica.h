@@ -109,11 +109,13 @@ public:
 
 			
 				this->pomeri();
-				if (this->strat == unique_ptr<StrategijaHaoticno>()) {
-					if (x < 0) x = 0;
-					if (x > rc.Width() - velicina) x = rc.Width() - velicina;
-					if (y < 0) y = 0;
-					if (y > rc.Height() - velicina) y = rc.Height() - velicina;
+				if (this->strat->jeHaoticna()) {
+					int cx = x.load();
+					int cy = y.load();
+					if (cx <= 0) x.store(velicina);
+					if (cx > rc.Width() - velicina) x.store(rc.Width() - velicina);
+					if (cy <= 0) y.store(velicina);
+					if (cy > rc.Height() - velicina) y.store(rc.Height() - velicina);
 				}
 			}
 			}).detach();

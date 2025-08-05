@@ -45,6 +45,7 @@ public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnMButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnDestroy();
 };
 
 #ifndef _DEBUG  // debug version in DS25_127RN_Nikola_KrstićView.cpp

@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CDS25127RNNikolaKrstićView, CView)
 	ON_WM_TIMER()
 	ON_WM_MBUTTONUP()
 	ON_WM_KEYDOWN()
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 // CDS25127RNNikolaKrstićView construction/destruction
@@ -80,7 +81,7 @@ void CDS25127RNNikolaKrstićView::OnRButtonUp(UINT nFlags , CPoint point)
 		Hranilica::getInstance()->promeniPoz(point.x, point.y);
 	}
 
-	OnContextMenu(this, point);
+	//OnContextMenu(this, point);
 }
 void CDS25127RNNikolaKrstićView::OnMButtonUp(UINT nFlags, CPoint point)
 {
@@ -186,4 +187,11 @@ void CDS25127RNNikolaKrstićView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlag
 
 	}
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+void CDS25127RNNikolaKrstićView::OnDestroy()
+{
+	CView::OnDestroy();
+	Hranilica::unistiHranilicu();
+	// TODO: Add your message handler code here
 }

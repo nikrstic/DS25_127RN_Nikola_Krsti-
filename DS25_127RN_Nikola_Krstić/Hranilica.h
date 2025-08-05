@@ -42,6 +42,7 @@ private:
 		zaustavi = true;
 		if (nit.joinable())
 			nit.join();
+		
 	}
 
 public:
